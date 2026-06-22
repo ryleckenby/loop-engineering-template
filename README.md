@@ -4,11 +4,16 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 
-A small, opinionated, reusable implementation of the **agentic loop**
-pattern — think → act → observe, repeated until the model produces an
-answer worth keeping — built on the Claude API. Use this repo as a
-GitHub template to start new agent projects without re-deriving the same
-plumbing every time.
+A template for **loop engineering**: building agents that run on their own — triggered by a
+schedule or an event, doing work, and remembering what they learned for next time — instead of
+being prompted task-by-task. It combines two layers:
+
+- **Orchestration** (`knowledge/`, `CLAUDE.md`, `.claude/skills/`) — a markdown knowledge base
+  loops read and write between runs, plus Claude Code skills to scaffold a new loop
+  (`new-loop`) and ship a verified code change (`ship-loop-change`).
+- **Execution** (`src/loop_engineering/`) — a small, swappable implementation of the **agentic
+  loop** pattern (think → act → observe) for the steps that need a model to autonomously call
+  tools, built on the Claude API.
 
 ```
    think (provider.complete) ──tool calls──▶ act (dispatch tools)
@@ -25,7 +30,10 @@ plumbing every time.
                   return final answer
 ```
 
-## Why this exists
+Read [`docs/loop-engineer-pattern.md`](docs/loop-engineer-pattern.md) first — it explains how the
+two layers fit together and when a loop needs the execution engine vs. a plain Claude Code skill.
+
+## The execution layer
 
 Most agent demos hardcode a `while True` loop directly against one model's
 SDK. This repo pulls that loop apart into small, swappable pieces so you can
@@ -72,7 +80,30 @@ state = loop.run("What's the weather in Lima?")
 print(state.final_answer)
 ```
 
-A fuller runnable example lives in [`examples/research_agent.py`](examples/research_agent.py).
+A fuller runnable example lives in [`examples/research_agent.py`](examples/research_agent.py), and
+[`scripts/task_refinement_loop.py`](scripts/task_refinement_loop.py) shows the execution engine
+being called from inside an orchestration-layer loop (see the `task-refinement` domain below).
+
+## The orchestration layer
+
+```
+knowledge/
+  README.md            schema: artifact kinds (signal, note), domains as loops, the Timeline convention
+  signals/              evidence/feedback, frequency-counted
+  notes/                 durable knowledge and decisions
+  domains/
+    task-refinement/    EXAMPLE: a scheduled loop that needs the execution engine
+    dev-trigger/        EXAMPLE: an event-driven loop that doesn't
+CLAUDE.md               template every session reads — fill in the {{PLACEHOLDER}}s for your project
+LOG.md                  global one-line-per-run activity feed
+.claude/skills/
+  new-loop/             scaffold a new knowledge/domains/<name>/README.md
+  ship-loop-change/     verify (test/lint), then commit + PR — never ship unverified
+```
+
+Copy either example domain as a starting point, or run the `new-loop` skill to scaffold a blank
+one. Triggers (cron/webhook) aren't reimplemented here — wire a domain's cadence to Claude Code's
+own `/schedule` or `/loop` skill; see [`docs/loop-engineer-pattern.md`](docs/loop-engineer-pattern.md).
 
 ## Using this as a template
 
@@ -86,7 +117,8 @@ Then rename the `loop_engineering` package, swap in your own tools, and go.
 
 ## Docs
 
-- [Concepts (start here if you're new)](docs/concepts.md)
+- [The loop engineer pattern (start here)](docs/loop-engineer-pattern.md) — how orchestration and execution fit together
+- [Concepts](docs/concepts.md) — the execution engine, beginner-level walkthrough
 - [Example use cases](docs/examples.md)
 - [Architecture](docs/architecture.md)
 - [Getting started](docs/getting_started.md)
