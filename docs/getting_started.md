@@ -1,5 +1,9 @@
 # Getting started
 
+New to agentic loops? Read [`concepts.md`](concepts.md) first — it walks
+through exactly what happens on each iteration of a real call. This page
+assumes you already know the shape and just want to run things.
+
 ## Install
 
 ```bash

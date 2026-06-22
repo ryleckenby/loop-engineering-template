@@ -36,7 +36,9 @@ reason about (and test) each one independently:
 - **`Tool` / `ToolRegistry`** — declare tools as JSON schema + a Python handler; dispatch and error-handling are generic.
 - **`StopCondition`** — a plain `Callable[[LoopState], bool]`; compose with `any_of` / `all_of` instead of writing bespoke control flow per agent.
 
-See [`docs/architecture.md`](docs/architecture.md) for the full breakdown.
+See [`docs/architecture.md`](docs/architecture.md) for the full breakdown, or
+[`docs/concepts.md`](docs/concepts.md) if you're new to agentic loops and want
+a slower, beginner-level walkthrough of what happens on each iteration.
 
 ## Quickstart
 
@@ -84,6 +86,8 @@ Then rename the `loop_engineering` package, swap in your own tools, and go.
 
 ## Docs
 
+- [Concepts (start here if you're new)](docs/concepts.md)
+- [Example use cases](docs/examples.md)
 - [Architecture](docs/architecture.md)
 - [Getting started](docs/getting_started.md)
 - [Contributing](CONTRIBUTING.md)
