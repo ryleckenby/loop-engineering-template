@@ -49,6 +49,23 @@ to call and when, based on results it can't predict in advance?**
 Most domains will be the second kind. Reach for the Python engine when a step's tool-calling
 shape is genuinely open-ended, not by default.
 
+**Trigger shape and execution-engine need are independent axes — don't conflate them.** The two
+example domains happen to pair scheduled-with-engine (`task-refinement`) and
+event-driven-without-engine (`dev-trigger`), which can make it look like the trigger decides the
+engine choice. It doesn't; they're orthogonal:
+
+- **Event-driven *and* needs the engine**: an `incident-response` domain triggered by a paging
+  webhook, whose work is "check recent deploys, query the error tracker, check related logs, form
+  a hypothesis, maybe roll back" — an unpredictable, data-dependent number of tool calls, same as
+  `task-refinement`'s, just woken up by an event instead of a clock.
+- **Scheduled *and* doesn't need the engine**: a `weekly-log-rollup` domain triggered by `/schedule`
+  every Monday, whose work is "read every `LOG.md` line since the last rollup, summarize into one
+  `knowledge/notes/` entry" — a fixed sequence with no open-ended tool-calling, same as
+  `dev-trigger`'s, just woken up by a clock instead of an event.
+
+Always re-ask the question in this section per domain — never infer the engine answer from the
+trigger answer.
+
 ## Putting it together: one full cycle
 
 Using `task-refinement` as the example:

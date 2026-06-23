@@ -8,6 +8,7 @@ Format: `YYYY-MM-DD HH:MM | domain | one-line summary | link(s)`
 
 ## Entries
 
+- 2026-06-22 16:00 | scaffold | stress-tested the orchestration/execution decision rule against opposite-shape domains (event+engine, scheduled+no-engine); rule held, fixed an implicit correlation in docs/loop-engineer-pattern.md's examples | [[docs/loop-engineer-pattern.md]]
 - 2026-06-22 15:00 | review-signals | added review-signals skill + skill-writing recipe; dogfooded against a synthetic signal (correctly judged "leave open," then removed) | [[.claude/skills/review-signals/SKILL.md]]
 - 2026-06-22 14:00 | smoke-test | dogfooded new-loop skill (scaffold verified correct, then removed — throwaway test domain) | [[.claude/skills/new-loop/SKILL.md]]
 - 2026-06-22 12:00 | scaffold | initial knowledge base + skills scaffolded from the loop-engineer-template pattern | [[knowledge/README.md]]
