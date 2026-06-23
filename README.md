@@ -99,6 +99,7 @@ LOG.md                  global one-line-per-run activity feed
 .claude/skills/
   new-loop/             scaffold a new knowledge/domains/<name>/README.md
   ship-loop-change/     verify (test/lint), then commit + PR — never ship unverified
+  review-signals/       periodically promote signals that have built up enough evidence to act on
 ```
 
 Copy either example domain as a starting point, or run the `new-loop` skill to scaffold a blank

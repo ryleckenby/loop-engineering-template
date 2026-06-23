@@ -67,6 +67,35 @@ Using `task-refinement` as the example:
 Next run, step 2 picks up exactly where this one left off — that's the compounding the orchestration
 layer exists to provide; the execution layer never needs to know about it.
 
+## Should you build out a library of skills?
+
+This template ships three: `new-loop`, `ship-loop-change`, and `review-signals`. That's
+deliberately small. The same "earn complexity" rule that governs `knowledge/domains/` (don't
+scaffold a domain until a real recurring task needs it — see `knowledge/README.md`) applies here:
+a shelf of speculative, never-run skills for needs your project doesn't have yet just goes stale
+and gives false confidence that they're tested.
+
+The three included skills earned their place differently than a speculative catalog would:
+`new-loop` and `ship-loop-change` are needed by *any* domain (scaffolding, shipping); `review-signals`
+is needed by *any* project that accumulates signals, regardless of domain content. None of them
+assume a specific domain's subject matter.
+
+When a project's actual need turns out to be domain-specific — a PR-review step, a support-triage
+checklist, anything tied to one domain's content — write that skill when the need is real, using
+this recipe instead of reaching for a pre-built one that won't fit:
+
+1. Name it after the action it performs, not the domain (`triage-support-ticket`, not
+   `support-domain-skill`) — skills are verbs, domains are nouns.
+2. Frontmatter: `name` (matches the folder), `description` (one sentence stating *what it does*
+   and *when to use it*, including a phrase a user might actually type — this is what Claude Code
+   matches against to decide whether to invoke it).
+3. Body: a short intro paragraph on why this skill exists, then a numbered `## Steps` section
+   specific enough that two different runs produce the same shape of result, then a `## Do not`
+   section for the failure modes you've already thought of (skipping verification, inventing data
+   the user didn't give you, acting outside the one folder it should touch).
+4. Test it on a throwaway case before trusting it on something real — see how this repo dogfooded
+   `new-loop` and `ship-loop-change` in `LOG.md`'s `smoke-test` entry.
+
 ## See also
 
 - [`concepts.md`](concepts.md) — what the execution-layer `Loop` itself is doing, iteration by iteration.
